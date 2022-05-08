@@ -1175,7 +1175,16 @@ _lp_python_env() {
 
     # Truncate to the last '/' section, which is the directory name.
     if [[ -n "${VIRTUAL_ENV-}" ]]; then
-        __lp_escape "${VIRTUAL_ENV##*/}"
+        # __lp_escape "${VIRTUAL_ENV##*/}"
+        case "${VIRTUAL_ENV}" in
+            */venv)
+                __lp_escape "$(basename $(dirname "${VIRTUAL_ENV}"))"
+                ;;
+            *)
+                __lp_escape "${VIRTUAL_ENV##*/}"
+                # __lp_escape "${VIRTUAL_ENV}"
+                ;;
+        esac
         lp_python_env=$ret
     elif [[ -n "${CONDA_DEFAULT_ENV-}" ]]; then
         __lp_escape "${CONDA_DEFAULT_ENV##*/}"
